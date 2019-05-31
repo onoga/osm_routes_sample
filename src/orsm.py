@@ -1,3 +1,6 @@
+"""orsm client
+"""
+
 import requests
 try:
     from urllib import urlencode        # python2
@@ -19,7 +22,7 @@ def call(server_url, service, profile, coordinates, **kwargs):
         ';'.join([','.join(map(str, i)) for i in coordinates]),
         urlencode(kwargs),
     )
-    print "request:", url
+    print "http get:", url
     return requests.get(url).json()
 
 
@@ -57,23 +60,3 @@ def service(
     **kwargs                # service options
 ):
     return eval(service)(coordinates, profile=profile, server_url=server_url, **kwargs)
-
-
-if __name__ == '__main__':
-    import json
-
-    points = [
-        # NOTE: reversed, (lon, lat)
-        (30.6794, 50.4052),
-        (30.5217, 50.4489),
-        (30.6235, 50.3628),
-    ]
-
-    response = service('route',
-        coordinates=points,
-        steps='true',
-        overview='full',
-        annotations='true',
-    )
-
-    print json.dumps(response, indent=4, ensure_ascii=False, sort_keys=True)
